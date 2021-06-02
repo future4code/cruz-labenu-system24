@@ -159,6 +159,73 @@ app.get("/age", async(req:Request, res: Response) => {
    }
 })
 
+app.post("/hobbies", async(req:Request, res: Response) => {
+   try {
+      const name = req.body.name
+      const result = await connection.raw(`
+      INSERT INTO Hobbies (name)
+      VALUES ("${name}");
+      `)
+      res.send("Hobbie created!")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+ })
+   }
+})
+
+app.put("/addHobbiesToStudent",async(req:Request, res: Response)=> {
+   try {
+      const studentId = req.body.student_id
+      const hobbieId = req.body.hobbie_id
+      const result = await connection.raw(`
+      INSERT INTO Student_Hobbies (student_id, hobbie_id)
+      VALUES (${studentId}, ${hobbieId})
+      `)
+      res.send("Hobbie was connected to this student")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+ })
+   }
+})
+
+app.post("/specialty", async(req:Request, res: Response) => {
+   try {
+      const name = req.body.name
+
+      if(name !== "React" && name !== "Redux"&& name !== "CSS"&& name !== "Typescript"&& name !== "Testes"&& name !== "Programação Orientada a Objetos"&& name !== "Backend"){
+         throw new Error("You must specify a valid specialty ( React, Redux, CSS, Testes, Typescript, Programação Orientada a Objetos or Backend)")
+      }
+
+      const result = await connection.raw(`
+      INSERT INTO Specialty (name)
+      VALUES ("${name}");
+      `)
+      res.send("Specialty created!")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+ })
+   }
+})
+
+app.put("/addSpecialtyToTeacher",async(req:Request, res: Response) => {
+   try {
+      const specialtyId = req.body.specialty_id
+      const teacherId = req.body.teacher_id
+      const result = await connection.raw(`
+         INSERT INTO Teacher_Specialties (teacher_id, specialty_id)
+         VALUES (${teacherId}, ${specialtyId})
+      `)
+      res.send("Specialty was connected to this teacher")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+ })
+   }
+})
+
 const server = app.listen(process.env.PORT || 3003, () => {
    if (server) {
       const address = server.address() as AddressInfo;
