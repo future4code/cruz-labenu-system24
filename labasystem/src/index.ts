@@ -21,13 +21,14 @@ const app: Express = express()
 app.use(express.json())
 app.use(cors())
 
+//Criar estudante
 app.post("/student", async (req: Request, res: Response) => {
    try {
 
       const { name, email, birth_date, class_id } = req.body
 
-      if(!name || !email || !birth_date || !class_id) {
-         throw new Error ("Missing information, you have to insert: name, email, birth_date and class_id")
+      if (!name || !email || !birth_date || !class_id) {
+         throw new Error("Missing information, you have to insert: name, email, birth_date and class_id")
       }
 
       const birthDateArray = birth_date.split("/")
@@ -50,13 +51,14 @@ app.post("/student", async (req: Request, res: Response) => {
    }
 })
 
+//Criar Professor
 app.post("/teacher", async (req: Request, res: Response) => {
    try {
 
       const { name, email, birth_date, class_id } = req.body
 
-      if(!name || !email || !birth_date || !class_id) {
-         throw new Error ("Missing information, you have to insert: name, email, birth_date and class_id")
+      if (!name || !email || !birth_date || !class_id) {
+         throw new Error("Missing information, you have to insert: name, email, birth_date and class_id")
       }
 
       const birthDateArray = birth_date.split("/")
@@ -79,12 +81,13 @@ app.post("/teacher", async (req: Request, res: Response) => {
    }
 })
 
+//Criar turma
 app.post("/class", async (req: Request, res: Response) => {
    try {
       const { name, initial_date, finish_date, module } = req.body
 
-      if(!name || !initial_date || !finish_date) {
-         throw new Error ("Missing information, you have to insert: name, initial_date and finish_date")
+      if (!name || !initial_date || !finish_date) {
+         throw new Error("Missing information, you have to insert: name, initial_date and finish_date")
       }
 
       const initialDateArray = initial_date.split("/")
@@ -103,9 +106,9 @@ app.post("/class", async (req: Request, res: Response) => {
          "${correctedinitialDate}",
          "${correctedFinishDate}"
          );
-         `) 
+         `)
          res.send("Class created!")
-      } 
+      }
       else {
 
          const result = await connection.raw(`
@@ -126,40 +129,42 @@ app.post("/class", async (req: Request, res: Response) => {
    }
 })
 
-app.get("/age", async(req:Request, res: Response) => {
-   try {       
+//Buscar idade de estudante pelo ID
+app.get("/age", async (req: Request, res: Response) => {
+   try {
       const id = req.query.id
-     const result = await connection.raw(`
-     SELECT birth_date FROM Student WHERE id = "${id}"
-     `)
+      const result = await connection.raw(`
+      SELECT birth_date FROM Student WHERE id = "${id}"
+      `)
 
-     const date = new Date(result[0][0].birth_date).toISOString()
-     const onlyDateArray = date.split("T")
-     const splittedDate = onlyDateArray[0].split("-")
-     
-     const yearBirth = Number(splittedDate[0])
-     const monthBirth = Number(splittedDate[1])
-     const dayBirth = Number(splittedDate[2])
+      const date = new Date(result[0][0].birth_date).toISOString()
+      const onlyDateArray = date.split("T")
+      const splittedDate = onlyDateArray[0].split("-")
 
-     const d = new Date
-     const currentYear:number = d.getFullYear() 
-     const currentMonth:number = d.getMonth() + 1  
-     const currentDay:number = d.getDate() 
+      const yearBirth = Number(splittedDate[0])
+      const monthBirth = Number(splittedDate[1])
+      const dayBirth = Number(splittedDate[2])
 
-     let age:number = currentYear - yearBirth
+      const d = new Date
+      const currentYear: number = d.getFullYear()
+      const currentMonth: number = d.getMonth() + 1
+      const currentDay: number = d.getDate()
 
-     if (currentMonth < monthBirth || currentMonth === monthBirth && currentDay < dayBirth){
-        age --
-     }
-     res.send({age})
+      let age: number = currentYear - yearBirth
+
+      if (currentMonth < monthBirth || currentMonth === monthBirth && currentDay < dayBirth) {
+         age--
+      }
+      res.send({ age })
    } catch (error) {
-        res.status(400).send({
-        message: error.message
-})
+      res.status(400).send({
+         message: error.message
+      })
    }
 })
 
-app.post("/hobbies", async(req:Request, res: Response) => {
+//Criar Hobbie
+app.post("/hobbie", async (req: Request, res: Response) => {
    try {
       const name = req.body.name
       const result = await connection.raw(`
@@ -170,11 +175,12 @@ app.post("/hobbies", async(req:Request, res: Response) => {
    } catch (error) {
       res.status(400).send({
          message: error.message
- })
+      })
    }
 })
 
-app.put("/addHobbiesToStudent",async(req:Request, res: Response)=> {
+//Adicionar hobbia a um estudante
+app.put("/addHobbiesToStudent", async (req: Request, res: Response) => {
    try {
       const studentId = req.body.student_id
       const hobbieId = req.body.hobbie_id
@@ -186,15 +192,16 @@ app.put("/addHobbiesToStudent",async(req:Request, res: Response)=> {
    } catch (error) {
       res.status(400).send({
          message: error.message
- })
+      })
    }
 })
 
-app.post("/specialty", async(req:Request, res: Response) => {
+//Criar especialidade
+app.post("/specialty", async (req: Request, res: Response) => {
    try {
       const name = req.body.name
 
-      if(name !== "React" && name !== "Redux"&& name !== "CSS"&& name !== "Typescript"&& name !== "Testes"&& name !== "Programação Orientada a Objetos"&& name !== "Backend"){
+      if (name !== "React" && name !== "Redux" && name !== "CSS" && name !== "Typescript" && name !== "Testes" && name !== "Programação Orientada a Objetos" && name !== "Backend") {
          throw new Error("You must specify a valid specialty ( React, Redux, CSS, Testes, Typescript, Programação Orientada a Objetos or Backend)")
       }
 
@@ -206,11 +213,12 @@ app.post("/specialty", async(req:Request, res: Response) => {
    } catch (error) {
       res.status(400).send({
          message: error.message
- })
+      })
    }
 })
 
-app.put("/addSpecialtyToTeacher",async(req:Request, res: Response) => {
+//Adicionar especialidade a um professor
+app.put("/addSpecialtyToTeacher", async (req: Request, res: Response) => {
    try {
       const specialtyId = req.body.specialty_id
       const teacherId = req.body.teacher_id
@@ -222,9 +230,96 @@ app.put("/addSpecialtyToTeacher",async(req:Request, res: Response) => {
    } catch (error) {
       res.status(400).send({
          message: error.message
- })
+      })
    }
 })
+
+//Buscar estudantes de uma turma
+app.get("/studentByClass", async (req: Request, res: Response) => {
+   try {
+      const className = req.query.name
+
+      if (!className) {
+         throw new Error("You must specify a class")
+      }
+
+      const result = await connection.raw(`
+      SELECT Student.name AS "Student", Class.name AS "Class" FROM Student 
+      JOIN Class ON Student.class_id = Class.id
+      WHERE Class.name = "${className}"
+   `)
+
+   const student = result[0]
+   
+   if(!student.length){
+      throw new Error("No students found")
+   }
+
+      res.status(200).send(student)
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+//Buscar professores por turma
+app.get("/teacherByClass", async (req: Request, res: Response) => {
+   try {
+      const className = req.query.name
+
+      if (!className) {
+         throw new Error("You must specify a class")
+      }
+
+      const result = await connection.raw(`
+      SELECT Teacher.name AS "Teacher", Class.name AS "Class" FROM Teacher 
+      JOIN Class ON Teacher.class_id = Class.id
+      WHERE Class.name = "${className}"
+   `)
+
+   const teacher = result[0]
+
+   if(!teacher.length){
+      throw new Error("No teachers found")
+   }
+   res.status(200).send(teacher)
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+//Estudantes com mesmo hobbie
+app.get("/studentByHobbie", async (req: Request, res: Response) => {
+   try {
+      const hobbie = req.query.name
+
+      if (!hobbie) {
+         throw new Error("You must specify a hobbie")
+      }
+
+      const result = await connection.raw(`
+      SELECT Student.name AS Student, Hobbies.name AS Hobbie FROM Student_Hobbies
+      JOIN Student ON Student.id = student_id
+      JOIN Hobbies ON Hobbies.id = hobbie_id
+      WHERE Hobbies.name = "${hobbie}";
+   `)
+
+   const students = result[0]
+
+   if(!students.length){
+      throw new Error("No students found")
+   }
+   res.status(200).send(students)
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
 
 const server = app.listen(process.env.PORT || 3003, () => {
    if (server) {
