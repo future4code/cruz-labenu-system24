@@ -90,6 +90,8 @@ app.post("/class", async (req: Request, res: Response) => {
       const initialDateArray = initial_date.split("/")
       const correctedinitialDate = `${initialDateArray[2]}/${initialDateArray[1]}/${initialDateArray[0]}`
 
+
+
       const finishDateArray = finish_date.split("/")
       const correctedFinishDate = `${finishDateArray[2]}/${finishDateArray[1]}/${finishDateArray[0]}`
 
