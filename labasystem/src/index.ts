@@ -88,7 +88,41 @@ const connection = knex({
       `)
       res.send("Class created!")
     } catch (error) {
-       
+      res.status(400).send({
+         message: error.message
+ })
+    }
+ })
+
+ app.get("/age", async(req:Request, res: Response) => {
+    try {       
+       const id = req.query.id
+      const result = await connection.raw(`
+      SELECT birth_date FROM Student WHERE id = "${id}"
+      `)
+
+      const date = new Date(result[0][0].birth_date).toISOString()
+      const onlyDateArray = date.split("T")
+      const splittedDate = onlyDateArray[0].split("-")
+      
+      const yearBirth = Number(splittedDate[0])
+      const monthBirth = Number(splittedDate[1])
+      const dayBirth = Number(splittedDate[2])
+
+      const d = new Date
+      const currentYear:number = d.getFullYear() 
+      const currentMonth:number = d.getMonth() + 1  
+      const currentDay:number = d.getDate() 
+      let age:number = currentYear - yearBirth
+      if (currentMonth < monthBirth || currentMonth === monthBirth && currentDay < dayBirth){
+         age --
+      }
+
+      res.send({age})
+    } catch (error) {
+         res.status(400).send({
+         message: error.message
+ })
     }
  })
 
