@@ -321,6 +321,78 @@ app.get("/studentByHobbie", async (req: Request, res: Response) => {
 })
 
 
+// Remover estudante de turma
+app.put("/removeStudentFromClass", async(req: Request, res: Response) => {
+   try {
+      const name = req.body.name
+      const result = await connection.raw(`
+      UPDATE Student SET class_id = null WHERE name = "${name}"
+      `)
+      res.send("Student removed from this class")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+//Remover Estudante
+app.put("/removeStudent", async(req: Request, res: Response) => {
+   try {
+      const id = req.body.id
+
+      const result = await connection.raw(`
+      DELETE FROM Student_Hobbies WHERE student_id = ${id};
+      `)
+
+      const secondResult = await connection.raw(`
+      DELETE FROM Student WHERE id = ${id};
+      `)
+
+      res.send("Student removed")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+
+// Remover Professor de turma
+app.put("/removeTeacherFromClass", async(req: Request, res: Response) => {
+   try {
+      const name = req.body.name
+      const result = await connection.raw(`
+      UPDATE Teacher SET class_id = null WHERE name = "${name}"
+      `)
+      res.send("Teacher removed from this class")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+//Mudar turma de módulo
+app.put("/changeModule", async(req: Request, res: Response) => {
+   try {
+      const id = req.query.id
+      const newModule = req.body.newModule
+      if(newModule !== "0" && newModule !== "1" && newModule !== "2" && newModule !== "3" && newModule !== "4" && newModule !== "5" && newModule !== "6" && newModule !== "7"){
+         throw new Error("You must specify a valid value of module (1,2,3,4,5,6 or 7)")
+      }
+      const result = await connection.raw(`
+      UPDATE Class SET module = "${newModule}" WHERE id = ${id}
+      `)
+      res.send("Module changed")
+   } catch (error) {
+      res.status(400).send({
+         message: error.message
+      })
+   }
+})
+
+
 const server = app.listen(process.env.PORT || 3003, () => {
    if (server) {
       const address = server.address() as AddressInfo;
