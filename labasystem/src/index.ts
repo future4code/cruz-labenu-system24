@@ -379,7 +379,7 @@ app.put("/changeModule", async(req: Request, res: Response) => {
       const id = req.query.id
       const newModule = req.body.newModule
       if(newModule !== "0" && newModule !== "1" && newModule !== "2" && newModule !== "3" && newModule !== "4" && newModule !== "5" && newModule !== "6" && newModule !== "7"){
-         throw new Error("You must specify a valid value of module (1,2,3,4,5,6 or 7)")
+         throw new Error("You must specify a valid value of module (0,1,2,3,4,5,6 or 7)")
       }
       const result = await connection.raw(`
       UPDATE Class SET module = "${newModule}" WHERE id = ${id}
