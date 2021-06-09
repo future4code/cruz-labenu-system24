@@ -1,24 +1,24 @@
 ## LabenuSystem:
 
-Você estuda na Labenu_ há tanto tempo que já parecem anos, não é? Então, hoje, vamos pedir para criar um sistema que represente o básico da nossa organização. 
+O projeto é uma cópia do sistema básico da labenu de back-end, que possui funcionalidades envolvendo as turmas, alunos e professores.
 
-Ele deve possuir, ao menos, as 3 entidades importantes:
+## Ferramentas 
 
-1. Estudantes 
+→ Node Js — Plataforma para construir aplicações web escaláveis;
 
-    Representa estudantes da nossa instituição. Eles devem possuir: id, nome, email, data de nascimento e os principais hobbies dele. 
+→ Typescript - TypeScript é um superconjunto de JavaScript que adiciona linguagem a linguagem;
 
-2. Docente
+→ Express - Framework para Node.js que permite à aplicação lidar com multiplas e diferentes requisições http à uma URL específica;
 
-    Representa docentes da nossa instituição. Eles devem possuir: id, nome, email, data de nascimento e todas as especialidades dele. Há 7 especialidades: React, Redux, CSS, Testes, Typescript, Programação Orientada a Objetos e Backend
+→ Knex - Construtor de SQL querys para Node.js, que dentre outras funciolnalidades, propicia a criação de pool de conexao e propagação;
 
-3. Turma
+→ MySQL Workbench - Plataforma utilizada para mexer no banco de dados.
 
-    Toda turma é composta das seguintes características: id, nome, data de início, data de término, lista de professores responsáveis, uma lista de alunos e módulo atual em que a turma está.
+→ Thunder Client - Extensão do VS Code para trabalhar com as requisições.
 
-    O módulo pode assumir os valores de 1 a 7 ou `undefined`, indicando que as aulas dessa turma ainda não começaram. Para esse exercício, vamos considerar que existam dois tipos de turma: integral ou noturna. Há uma restrição para o nome das turmas noturnas: tem que terminar com `-na-night`.
+## Funcionalidades
 
-As funcionalidades básicas são:
+A aplicação permite ao usuário: 
 
 → Criar estudante;
 
@@ -31,3 +31,17 @@ As funcionalidades básicas são:
 → Adicionar docente na turma;
 
 → Pegar a idade de algum estudante a partir do id
+
+→ Exibir estudantes de uma turma;
+
+→ Exibir docentes de uma turma;
+
+→ Exibir estudantes que possuam o mesmo hobby;
+
+→ Remover estudante de uma turma;
+
+→ Remover estudante;
+
+→ Remover docente de uma turma;
+
+→ Mudar turma de módulo
